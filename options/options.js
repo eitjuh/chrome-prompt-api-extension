@@ -127,6 +127,28 @@ function setupEventListeners() {
     // Data management buttons
     document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
     document.getElementById('export-data-btn').addEventListener('click', exportData);
+    
+    // Update keyboard shortcuts display for Mac
+    updateKeyboardShortcuts();
+}
+
+// Update keyboard shortcuts display based on platform
+function updateKeyboardShortcuts() {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    
+    if (isMac) {
+        // Update shortcut displays for Mac
+        const shortcutKeys = document.querySelectorAll('.shortcut-key');
+        shortcutKeys.forEach((shortcut, index) => {
+            if (index === 0) {
+                // Toggle Sidebar
+                shortcut.innerHTML = '<kbd>⌘ Cmd</kbd> + <kbd>⇧ Shift</kbd> + <kbd>S</kbd>';
+            } else if (index === 1) {
+                // Quick Prompt
+                shortcut.innerHTML = '<kbd>⌘ Cmd</kbd> + <kbd>⇧ Shift</kbd> + <kbd>Y</kbd>';
+            }
+        });
+    }
 }
 
 // Clear history

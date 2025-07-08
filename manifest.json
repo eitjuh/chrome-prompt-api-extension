@@ -52,7 +52,7 @@
     "toggle-sidebar": {
       "suggested_key": {
         "default": "Alt+Shift+S",
-        "mac": "Alt+Shift+S"
+        "mac": "Command+Shift+S"
       },
       "description": "Toggle AI Assistant Sidebar"
     },

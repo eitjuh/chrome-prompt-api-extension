@@ -1,5 +1,7 @@
 // Content script for Universal AI Assistant Sidebar
 console.log('🧠 Universal AI Assistant Sidebar - Content script loaded');
+console.log('Current URL:', window.location.href);
+console.log('Document ready state:', document.readyState);
 
 // Global variables
 let sidebarInjected = false;
@@ -25,6 +27,18 @@ async function initialize() {
   // Inject sidebar
   await injectSidebar();
 
+  // Check if auto-show is enabled
+  const settings = await chrome.storage.sync.get(['autoShowSidebar']);
+  console.log('Auto-show setting:', settings.autoShowSidebar);
+  if (settings.autoShowSidebar) {
+    console.log('Auto-showing sidebar in 500ms...');
+    // Small delay to ensure everything is properly initialized
+    setTimeout(() => {
+      console.log('Auto-showing sidebar now');
+      showSidebar();
+    }, 500);
+  }
+
   // Analyze page content
   analyzePageContent();
 
@@ -45,6 +59,7 @@ async function injectSidebar() {
     // Create sidebar container
     const sidebarContainer = document.createElement('div');
     sidebarContainer.id = 'ai-assistant-sidebar';
+    sidebarContainer.className = 'ai-sidebar-hidden'; // Start hidden
     sidebarContainer.innerHTML = `
       <div class="ai-sidebar-header">
         <div class="ai-sidebar-title">
@@ -254,14 +269,21 @@ function handleContextMenuAction(menuItemId, selectionText) {
 
 // Toggle sidebar visibility
 function toggleSidebar(show = null) {
+  console.log('toggleSidebar called with show=', show);
   const sidebar = document.getElementById('ai-assistant-sidebar');
-  if (!sidebar) return;
+  if (!sidebar) {
+    console.error('Sidebar element not found!');
+    return;
+  }
 
   if (show === null) {
     sidebarVisible = !sidebarVisible;
   } else {
     sidebarVisible = show;
   }
+
+  console.log('Setting sidebarVisible to:', sidebarVisible);
+  console.log('Before toggle - sidebar classes:', sidebar.className);
 
   if (sidebarVisible) {
     sidebar.classList.add('ai-sidebar-visible');
@@ -271,11 +293,13 @@ function toggleSidebar(show = null) {
     sidebar.classList.remove('ai-sidebar-visible');
   }
 
+  console.log('After toggle - sidebar classes:', sidebar.className);
   console.log(`Sidebar ${sidebarVisible ? 'shown' : 'hidden'}`);
 }
 
 // Show sidebar
 function showSidebar() {
+  console.log('showSidebar() called');
   toggleSidebar(true);
 }
 
@@ -490,24 +514,30 @@ async function queryAI(prompt) {
 // Create AI session
 async function createAISession() {
   try {
-    // Check if AI API is available
-    if (!('ai' in self) || !('languageModel' in self.ai)) {
+    // Check if Language Model API is available
+    if (!('LanguageModel' in self)) {
       throw new Error('Chrome Prompt API not available');
     }
 
     // Check current availability
-    const capabilities = await self.ai.languageModel.capabilities();
+    const availability = await LanguageModel.availability();
+    console.log('LanguageModel availability:', availability);
 
-    if (capabilities.available === 'no') {
+    if (availability === 'no' || availability === 'unavailable') {
       throw new Error('AI model not available on this device');
     }
 
-    if (capabilities.available === 'after-download') {
+    if (availability === 'after-download') {
       throw new Error('AI model needs to be downloaded first');
+    }
+    
+    // Accept both 'available' and 'readily' as ready states
+    if (availability !== 'available' && availability !== 'readily') {
+      throw new Error(`Unexpected availability state: ${availability}`);
     }
 
     // Create session with optimal parameters
-    const session = await self.ai.languageModel.create({
+    const session = await LanguageModel.create({
       temperature: 0.7,
       topK: 8,
     });
@@ -526,7 +556,7 @@ async function startModelDownload() {
     updateAIStatus('downloading');
 
     // Create a session which triggers the download
-    const session = await self.ai.languageModel.create();
+    const session = await LanguageModel.create();
 
     // Store session for later use
     aiSession = session;
@@ -660,3 +690,19 @@ function toggleHistory() {
 }
 
 console.log('Content script initialization complete');
+
+// Debug: Add manual toggle for testing
+setTimeout(() => {
+  const sidebar = document.getElementById('ai-assistant-sidebar');
+  console.log('DEBUG - Sidebar check after delay:');
+  console.log('- Sidebar exists:', !!sidebar);
+  if (sidebar) {
+    console.log('- Sidebar classes:', sidebar.className);
+    console.log('- Sidebar style.right:', sidebar.style.right);
+    console.log('- Computed right:', window.getComputedStyle(sidebar).right);
+    console.log('- sidebarVisible variable:', sidebarVisible);
+  }
+  
+  // Try using keyboard shortcut Cmd+Shift+S to toggle
+  console.log('TIP: Use Cmd+Shift+S to toggle the sidebar');
+}, 1000);

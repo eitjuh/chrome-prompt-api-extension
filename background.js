@@ -89,20 +89,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Check Chrome Prompt API availability
 async function checkPromptAPIAvailability() {
   try {
-    // Check if AI API is available
-    if (!('ai' in self) || !('languageModel' in self.ai)) {
+    console.log('🔍 Checking Chrome Prompt API availability...');
+    
+    // Check if Language Model API is available
+    if (!('LanguageModel' in self)) {
+      console.error('❌ LanguageModel not found in self');
       throw new Error('Chrome Prompt API not available - ensure Chrome 138+ and Early Preview Program enrollment');
     }
+    
+    console.log('✅ LanguageModel found in self');
+    console.log('📋 LanguageModel object:', LanguageModel);
+    console.log('📋 LanguageModel methods:', Object.getOwnPropertyNames(LanguageModel));
 
-    // Check model capabilities and availability
-    const capabilities = await self.ai.languageModel.capabilities();
-    console.log('Model capabilities:', capabilities);
-
-    const availability = capabilities.available;
+    // Check model availability
+    console.log('🔍 Calling LanguageModel.availability()...');
+    const availability = await LanguageModel.availability();
+    console.log('📋 Raw availability response:', availability);
+    console.log('📋 Availability type:', typeof availability);
+    console.log('📋 Availability value:', JSON.stringify(availability));
 
     switch (availability) {
+      case 'available':
       case 'readily':
-        console.log('✅ AI model is readily available');
+        console.log('✅ AI model is available/ready');
         return { available: true, state: 'ready' };
 
       case 'after-download':
@@ -110,15 +119,26 @@ async function checkPromptAPIAvailability() {
         return { available: true, state: 'download-required' };
 
       case 'no':
+      case 'unavailable':
         console.log('❌ AI model not available on this device');
         return { available: false, state: 'unavailable', error: 'Model not available on this device' };
 
       default:
         console.log('❓ Unknown availability state:', availability);
-        return { available: false, state: 'unknown', error: 'Unknown availability state' };
+        console.log('📋 Expected one of: available, readily, after-download, no, unavailable');
+        return { available: false, state: 'unknown', error: `Unknown availability state: ${availability}` };
     }
   } catch (error) {
     console.error('❌ Chrome Prompt API check failed:', error);
+    console.error('📋 Error details:', error.stack);
+    
+    // Try alternative API access methods
+    console.log('🔍 Checking alternative API access methods...');
+    console.log('📋 chrome.ai exists?', 'ai' in chrome);
+    console.log('📋 window.ai exists?', typeof window !== 'undefined' && 'ai' in window);
+    console.log('📋 globalThis.ai exists?', 'ai' in globalThis);
+    console.log('📋 self.ai exists?', 'ai' in self);
+    
     return { available: false, state: 'error', error: error.message };
   }
 }
