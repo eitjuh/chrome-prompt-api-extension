@@ -45,12 +45,7 @@ A powerful Chrome Extension that brings AI assistance to every webpage through a
 - **Internet**: Unlimited/unmetered connection (for model download)
 
 ### Required Setup
-1. **Join the Early Preview Program**:
-   - Visit: https://developer.chrome.com/docs/ai/join-epp
-   - Sign up for Chrome Built-in AI Early Preview Program
-   - Wait for approval (may take time)
-
-2. **Enable AI Features**:
+1. **Enable AI Features**:
    - Go to `chrome://flags/`
    - Enable `#optimization-guide-on-device-model`
    - Enable `#prompt-api-for-gemini-nano`
