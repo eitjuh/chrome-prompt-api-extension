@@ -51,15 +51,15 @@
   "commands": {
     "toggle-sidebar": {
       "suggested_key": {
-        "default": "Alt+A",
-        "mac": "Alt+A"
+        "default": "Alt+Shift+S",
+        "mac": "Alt+Shift+S"
       },
       "description": "Toggle AI Assistant Sidebar"
     },
     "quick-prompt": {
       "suggested_key": {
-        "default": "Ctrl+Alt+A",
-        "mac": "Cmd+Alt+A"
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
       },
       "description": "Quick AI prompt for selected text"
     }
