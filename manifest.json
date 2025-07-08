@@ -22,7 +22,14 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": [
+        "modules/sidebar.js",
+        "modules/contentAnalysis.js",
+        "modules/selectionActions.js",
+        "modules/articleOverlay.js",
+        "modules/aiSession.js",
+        "content.js"
+      ],
       "css": ["sidebar/sidebar.css"],
       "run_at": "document_idle"
     }
@@ -67,7 +74,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["sidebar/*", "assets/*", "utils/*"],
+      "resources": ["sidebar/*", "assets/*", "utils/*", "modules/*"],
       "matches": ["<all_urls>"]
     }
   ]

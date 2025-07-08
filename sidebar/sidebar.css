@@ -201,6 +201,147 @@
   font-size: 16px;
 }
 
+/* Article actions */
+.ai-article-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ai-action-btn-small {
+  padding: 8px 12px;
+  font-size: 12px;
+  flex: 1;
+  justify-content: center;
+  min-height: 36px;
+}
+
+.ai-action-btn-small .ai-action-icon {
+  font-size: 14px;
+}
+
+/* Article Overlay Styles */
+.ai-article-overlay {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  z-index: 2147483646;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.ai-article-overlay.ai-overlay-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ai-overlay-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  min-width: 200px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.ai-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.ai-overlay-icon {
+  font-size: 16px;
+  margin-right: 6px;
+}
+
+.ai-overlay-time {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.ai-overlay-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.ai-overlay-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #374151;
+}
+
+.ai-overlay-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-overlay-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+}
+
+.ai-overlay-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.ai-overlay-btn .ai-btn-icon {
+  font-size: 14px;
+}
+
+/* Dark mode support for overlay */
+@media (prefers-color-scheme: dark) {
+  .ai-overlay-content {
+    background: rgba(31, 41, 55, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f9fafb;
+  }
+
+  .ai-overlay-header {
+    color: #f9fafb;
+  }
+
+  .ai-overlay-time {
+    color: #9ca3af;
+  }
+
+  .ai-overlay-close {
+    color: #6b7280;
+  }
+
+  .ai-overlay-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f9fafb;
+  }
+}
+
 /* Prompt area */
 .ai-prompt-area {
   padding: 16px 20px;

@@ -8,8 +8,17 @@ A powerful Chrome Extension that brings AI assistance to every webpage through a
 - **Collapsible AI Sidebar**: Elegant sidebar that works on any website
 - **Contextual Intelligence**: Auto-detects content type (code, articles, forums, etc.)
 - **Smart Quick Actions**: One-click summarization, explanation, and improvement
+- **Auto-Summarize Long Articles**: ⭐ NEW! Automatically detects long articles and provides:
+  - 📊 **Reading Time**: Estimated time to read the article
+  - 📝 **Auto-Summarize**: Comprehensive summary with key takeaways
+  - ⚡ **TL;DR**: Quick 2-3 sentence summary for busy readers
+- **Smart Selection Actions**: ⭐ Floating buttons appear when you select text
+  - 📝 **Explain**: Get detailed explanations of selected text
+  - 🔍 **Define**: Define and explain key terms
+  - 🧒 **ELI5**: Explain like I'm 5 (simple language)
+  - 📚 **Summary**: Quick summaries with key points
 - **Selection-Aware Prompts**: Right-click any text for instant AI assistance
-- **Hotkey Controls**: Quick access with Alt+A (toggle) and Ctrl+Alt+A (quick prompt)
+- **Hotkey Controls**: Quick access with Cmd+Shift+S (toggle) and Cmd+Shift+Y (quick prompt)
 
 ### 🎯 Smart Content Detection
 - **GitHub**: Code explanation, PR reviews, issue summaries
@@ -64,11 +73,12 @@ A powerful Chrome Extension that brings AI assistance to every webpage through a
 ### Getting Started
 1. **Check AI Status**: Click the extension icon to open settings and verify AI availability
 2. **First Use**: If prompted, allow the AI model to download (~2GB)
-3. **Open Sidebar**: Press `Alt+A` or visit any webpage and use the extension
+3. **Open Sidebar**: Press `Cmd+Shift+S` or visit any webpage and use the extension
 
 ### Basic Usage
-- **Toggle Sidebar**: Press `Alt+A` or click the extension icon
+- **Toggle Sidebar**: Press `Cmd+Shift+S` or click the extension icon
 - **Quick Summarize**: Click "Summarize Page" for instant page summary
+- **Smart Selection**: ⭐ NEW! Select any text (5+ characters) to see floating action buttons
 - **Text Selection**: Select any text and right-click for AI actions
 - **Custom Prompts**: Type your own questions in the prompt area
 
