@@ -1,0 +1,74 @@
+{
+  "manifest_version": 3,
+  "name": "Universal AI Assistant Sidebar",
+  "version": "1.0.0",
+  "description": "AI-powered sidebar that provides contextual assistance on any webpage using Chrome's Prompt API",
+
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "activeTab",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "<all_urls>"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["sidebar/sidebar.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "options/options.html",
+    "default_title": "Universal AI Assistant",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+
+  "options_page": "options/options.html",
+
+  "commands": {
+    "toggle-sidebar": {
+      "suggested_key": {
+        "default": "Alt+A",
+        "mac": "Alt+A"
+      },
+      "description": "Toggle AI Assistant Sidebar"
+    },
+    "quick-prompt": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+A",
+        "mac": "Cmd+Alt+A"
+      },
+      "description": "Quick AI prompt for selected text"
+    }
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["sidebar/*", "assets/*", "utils/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

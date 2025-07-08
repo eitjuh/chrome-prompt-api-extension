@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal AI Assistant - Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="options-container">
+        <header class="options-header">
+            <h1>🧠 Universal AI Assistant</h1>
+            <p>Configure your AI assistant settings</p>
+        </header>
+
+        <main class="options-main">
+            <section class="options-section">
+                <h2>🚀 Getting Started</h2>
+                <div class="info-card">
+                    <div class="info-header">
+                        <span class="info-icon">⚠️</span>
+                        <h3>Prerequisites</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>To use this extension, you need:</p>
+                        <ul>
+                            <li>Chrome 138+ or Chromium-based browser</li>
+                            <li>Join the <a href="https://developer.chrome.com/docs/ai/join-epp" target="_blank">Chrome Built-in AI Early Preview Program</a></li>
+                            <li>At least 22 GB free storage space</li>
+                            <li>GPU with 4+ GB VRAM</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-header">
+                        <span class="status-icon">🔍</span>
+                        <h3>AI Model Status</h3>
+                    </div>
+                    <div class="status-content">
+                        <div id="ai-status-display">
+                            <span class="status-indicator">⏳</span>
+                            <span class="status-text">Checking AI availability...</span>
+                        </div>
+                        <button id="check-ai-btn" class="btn btn-primary">Check Again</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="options-section">
+                <h2>⚙️ General Settings</h2>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <label for="enable-extension">Enable Extension</label>
+                        <p class="setting-description">Enable or disable the AI assistant on all websites</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enable-extension" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <label for="auto-show-sidebar">Auto-show Sidebar</label>
+                        <p class="setting-description">Automatically show sidebar when visiting new pages</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="auto-show-sidebar">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <label for="theme-mode">Theme</label>
+                        <p class="setting-description">Choose your preferred theme</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="theme-mode">
+                            <option value="auto">Auto (System)</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="options-section">
+                <h2>🔥 Shortcuts</h2>
+
+                <div class="shortcut-item">
+                    <div class="shortcut-label">
+                        <span class="shortcut-icon">⌨️</span>
+                        <div>
+                            <h4>Toggle Sidebar</h4>
+                            <p>Show/hide the AI assistant sidebar</p>
+                        </div>
+                    </div>
+                    <div class="shortcut-key">
+                        <kbd>Alt</kbd> + <kbd>A</kbd>
+                    </div>
+                </div>
+
+                <div class="shortcut-item">
+                    <div class="shortcut-label">
+                        <span class="shortcut-icon">⚡</span>
+                        <div>
+                            <h4>Quick Prompt</h4>
+                            <p>Quick AI prompt for selected text</p>
+                        </div>
+                    </div>
+                    <div class="shortcut-key">
+                        <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd>
+                    </div>
+                </div>
+            </section>
+
+            <section class="options-section">
+                <h2>🗂️ Data Management</h2>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <label for="save-history">Save Prompt History</label>
+                        <p class="setting-description">Keep a history of your AI interactions</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="save-history" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="data-actions">
+                    <button id="clear-history-btn" class="btn btn-secondary">Clear History</button>
+                    <button id="export-data-btn" class="btn btn-secondary">Export Data</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="options-footer">
+            <div class="footer-info">
+                <p>Universal AI Assistant v1.0.0</p>
+                <p>Built with Chrome's Prompt API</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://developer.chrome.com/docs/ai/prompt-api" target="_blank">API Documentation</a>
+                <a href="https://github.com" target="_blank">GitHub</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>
