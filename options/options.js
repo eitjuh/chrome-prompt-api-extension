@@ -16,8 +16,13 @@ async function loadSettings() {
             'enableExtension',
             'autoShowSidebar',
             'themeMode',
-            'saveHistory'
+            'saveHistory',
+            'aiProvider',
+            'openaiModel'
         ]);
+
+        // Load encrypted API key separately
+        const encryptedData = await chrome.storage.local.get(['openaiApiKey']);
 
         // Set toggle switches
         document.getElementById('enable-extension').checked = settings.enableExtension !== false;
@@ -26,6 +31,20 @@ async function loadSettings() {
 
         // Set theme
         document.getElementById('theme-mode').value = settings.themeMode || 'auto';
+
+        // Set AI provider
+        document.getElementById('ai-provider').value = settings.aiProvider || 'chrome';
+        
+        // Set OpenAI model
+        document.getElementById('openai-model').value = settings.openaiModel || 'gpt-4o-mini';
+
+        // Set API key if available
+        if (encryptedData.openaiApiKey) {
+            document.getElementById('openai-api-key').value = encryptedData.openaiApiKey;
+        }
+
+        // Show/hide OpenAI config based on provider
+        toggleOpenAIConfig(settings.aiProvider === 'openai');
 
         console.log('Settings loaded:', settings);
     } catch (error) {
@@ -40,10 +59,21 @@ async function saveSettings() {
             enableExtension: document.getElementById('enable-extension').checked,
             autoShowSidebar: document.getElementById('auto-show-sidebar').checked,
             themeMode: document.getElementById('theme-mode').value,
-            saveHistory: document.getElementById('save-history').checked
+            saveHistory: document.getElementById('save-history').checked,
+            aiProvider: document.getElementById('ai-provider').value,
+            openaiModel: document.getElementById('openai-model').value
         };
 
         await chrome.storage.sync.set(settings);
+
+        // Save API key separately in local storage (more secure for sensitive data)
+        const apiKey = document.getElementById('openai-api-key').value.trim();
+        if (apiKey) {
+            await chrome.storage.local.set({ openaiApiKey: apiKey });
+        } else {
+            await chrome.storage.local.remove('openaiApiKey');
+        }
+
         console.log('Settings saved:', settings);
 
         // Notify content scripts about settings change
@@ -120,9 +150,16 @@ function setupEventListeners() {
     document.getElementById('auto-show-sidebar').addEventListener('change', saveSettings);
     document.getElementById('theme-mode').addEventListener('change', saveSettings);
     document.getElementById('save-history').addEventListener('change', saveSettings);
+    document.getElementById('ai-provider').addEventListener('change', handleProviderChange);
+    document.getElementById('openai-model').addEventListener('change', saveSettings);
+    document.getElementById('openai-api-key').addEventListener('input', saveSettings);
 
     // Check AI button
     document.getElementById('check-ai-btn').addEventListener('click', checkAIStatus);
+
+    // OpenAI specific buttons
+    document.getElementById('toggle-api-key-visibility').addEventListener('click', toggleApiKeyVisibility);
+    document.getElementById('test-openai-btn').addEventListener('click', testOpenAIConnection);
 
     // Data management buttons
     document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
@@ -301,5 +338,100 @@ window.startModelDownload = async function() {
         statusText.textContent = 'Download failed';
     }
 };
+
+// OpenAI Configuration Functions
+
+// Toggle OpenAI configuration visibility
+function toggleOpenAIConfig(show) {
+    const configElements = [
+        document.getElementById('openai-config'),
+        document.getElementById('openai-model-config'),
+        document.getElementById('openai-test')
+    ];
+
+    configElements.forEach(element => {
+        element.style.display = show ? 'flex' : 'none';
+    });
+}
+
+// Handle AI provider change
+function handleProviderChange() {
+    const provider = document.getElementById('ai-provider').value;
+    toggleOpenAIConfig(provider === 'openai');
+    saveSettings();
+}
+
+// Toggle API key visibility
+function toggleApiKeyVisibility() {
+    const apiKeyInput = document.getElementById('openai-api-key');
+    const button = document.getElementById('toggle-api-key-visibility');
+    
+    if (apiKeyInput.type === 'password') {
+        apiKeyInput.type = 'text';
+        button.textContent = '🙈';
+        button.title = 'Hide API key';
+    } else {
+        apiKeyInput.type = 'password';
+        button.textContent = '👁️';
+        button.title = 'Show API key';
+    }
+}
+
+// Test OpenAI connection
+async function testOpenAIConnection() {
+    const testResult = document.getElementById('openai-test-result');
+    const testButton = document.getElementById('test-openai-btn');
+    const apiKey = document.getElementById('openai-api-key').value.trim();
+    const model = document.getElementById('openai-model').value;
+
+    if (!apiKey) {
+        showTestResult('Please enter an API key first', 'error');
+        return;
+    }
+
+    if (!apiKey.startsWith('sk-')) {
+        showTestResult('Invalid API key format. OpenAI API keys start with "sk-"', 'error');
+        return;
+    }
+
+    testButton.disabled = true;
+    testButton.textContent = 'Testing...';
+    showTestResult('Testing connection to OpenAI...', 'loading');
+
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: model,
+                messages: [{ role: 'user', content: 'Hello, this is a test message.' }],
+                max_tokens: 10
+            })
+        });
+
+        if (response.ok) {
+            showTestResult('✅ Connection successful! Your OpenAI API key is working.', 'success');
+        } else {
+            const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
+            const errorMessage = errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+            showTestResult(`❌ Connection failed: ${errorMessage}`, 'error');
+        }
+    } catch (error) {
+        showTestResult(`❌ Connection failed: ${error.message}`, 'error');
+    } finally {
+        testButton.disabled = false;
+        testButton.textContent = 'Test Connection';
+    }
+}
+
+// Show test result
+function showTestResult(message, type) {
+    const testResult = document.getElementById('openai-test-result');
+    testResult.textContent = message;
+    testResult.className = `test-result ${type}`;
+}
 
 console.log('Options page script loaded');

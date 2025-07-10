@@ -8,10 +8,16 @@ A powerful Chrome Extension that brings AI assistance to every webpage through a
 - **Collapsible AI Sidebar**: Elegant sidebar that works on any website
 - **Contextual Intelligence**: Auto-detects content type (code, articles, forums, etc.)
 - **Smart Quick Actions**: One-click summarization, explanation, and improvement
-- **Auto-Summarize Long Articles**: ⭐ NEW! Automatically detects long articles and provides:
+- **Auto-Summarize Long Articles**: ⭐ Automatically detects long articles and provides:
   - 📊 **Reading Time**: Estimated time to read the article
   - 📝 **Auto-Summarize**: Comprehensive summary with key takeaways
   - ⚡ **TL;DR**: Quick 2-3 sentence summary for busy readers
+- **Smart Form Helper**: ⭐ NEW! Intelligent assistance for any form on the web
+  - 🔍 **Auto-Detection**: Finds contact forms, comment boxes, and text areas
+  - ✍️ **Content Generation**: Draft messages, reviews, and professional responses
+  - 🎭 **Tone Adjustment**: Make text more formal, casual, or professional
+  - 🔧 **Text Polish**: Grammar check and clarity improvements
+  - 📝 **Smart Suggestions**: Context-aware writing assistance
 - **Smart Selection Actions**: ⭐ Floating buttons appear when you select text
   - 📝 **Explain**: Get detailed explanations of selected text
   - 🔍 **Define**: Define and explain key terms

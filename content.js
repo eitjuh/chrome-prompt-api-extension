@@ -11,6 +11,7 @@ class AIAssistant {
     this.contentAnalysis = new window.ContentAnalysisManager();
     this.selectionActions = new window.SelectionActionsManager();
     this.articleOverlay = new window.ArticleOverlayManager();
+    this.formHelper = new window.FormHelperManager();
     this.aiSession = new window.AISessionManager();
   }
 
@@ -42,6 +43,11 @@ class AIAssistant {
 
     // Set up event listeners
     this.setupEventListeners();
+
+    // Initialize form helper
+    console.log('🚀 Initializing FormHelper...');
+    this.formHelper.initialize();
+    console.log('✅ FormHelper initialized and available at window.aiAssistant.formHelper');
 
     // Check AI availability
     await this.aiSession.checkAIAvailability();
@@ -84,6 +90,7 @@ class AIAssistant {
         this.analyzePageContent();
         this.selectionActions.cleanup();
         this.articleOverlay.cleanup();
+        this.formHelper.refresh();
       }
     }).observe(document, { subtree: true, childList: true });
   }
@@ -187,7 +194,14 @@ async function initializeAIAssistant() {
 
 // Handle messages from background script
 chrome.runtime.onMessage.addListener((message) => {
-  window.aiAssistant?.handleMessage(message);
+  console.log('Content script received message:', message);
+  
+  if (message.action === 'settingsChanged') {
+    // Handle settings changes
+    window.aiAssistant?.aiSession.handleSettingsChange(message.settings);
+  } else {
+    window.aiAssistant?.handleMessage(message);
+  }
 });
 
 // Debug info

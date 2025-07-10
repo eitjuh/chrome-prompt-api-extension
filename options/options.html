@@ -48,6 +48,60 @@
             </section>
 
             <section class="options-section">
+                <h2>🤖 AI Provider Settings</h2>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <label for="ai-provider">AI Provider</label>
+                        <p class="setting-description">Choose between local Chrome AI or OpenAI API</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="ai-provider">
+                            <option value="chrome">Chrome Built-in AI (Local)</option>
+                            <option value="openai">OpenAI API</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item" id="openai-config" style="display: none;">
+                    <div class="setting-label">
+                        <label for="openai-api-key">OpenAI API Key</label>
+                        <p class="setting-description">Enter your OpenAI API key. Get one from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a></p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="password" id="openai-api-key" placeholder="sk-...">
+                        <button id="toggle-api-key-visibility" class="btn btn-icon" type="button">👁️</button>
+                    </div>
+                </div>
+
+                <div class="setting-item" id="openai-model-config" style="display: none;">
+                    <div class="setting-label">
+                        <label for="openai-model">OpenAI Model</label>
+                        <p class="setting-description">Choose the OpenAI model to use</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="openai-model">
+                            <option value="gpt-4o-mini">GPT-4o Mini (Recommended)</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item" id="openai-test" style="display: none;">
+                    <div class="setting-label">
+                        <label>Test OpenAI Connection</label>
+                        <p class="setting-description">Test your OpenAI API key and model selection</p>
+                    </div>
+                    <div class="setting-control">
+                        <button id="test-openai-btn" class="btn btn-secondary">Test Connection</button>
+                        <div id="openai-test-result" class="test-result"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="options-section">
                 <h2>⚙️ General Settings</h2>
 
                 <div class="setting-item">

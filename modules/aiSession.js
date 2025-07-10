@@ -2,16 +2,36 @@
 class AISessionManager {
   constructor() {
     this.aiSession = null;
+    this.openaiProvider = null;
+    this.currentProvider = 'chrome'; // Default to Chrome built-in AI
+    this.initializeProviders();
   }
 
-  // Query AI using Chrome Prompt API
-  async queryAI(prompt) {
-    if (!this.aiSession) {
-      this.aiSession = await this.createAISession();
-    }
+  // Initialize AI providers
+  async initializeProviders() {
+    // Initialize OpenAI provider
+    this.openaiProvider = new OpenAIProvider();
+    await this.openaiProvider.initialize();
+    
+    // Load current provider setting
+    const settings = await chrome.storage.sync.get(['aiProvider']);
+    this.currentProvider = settings.aiProvider || 'chrome';
+    
+    console.log('AI Session Manager initialized with provider:', this.currentProvider);
+  }
 
-    const response = await this.aiSession.prompt(prompt);
-    return response;
+  // Query AI using selected provider
+  async queryAI(prompt) {
+    if (this.currentProvider === 'openai') {
+      return await this.openaiProvider.queryAI(prompt);
+    } else {
+      // Use Chrome built-in AI
+      if (!this.aiSession) {
+        this.aiSession = await this.createAISession();
+      }
+      const response = await this.aiSession.prompt(prompt);
+      return response;
+    }
   }
 
   // Create AI session
@@ -75,6 +95,19 @@ class AISessionManager {
 
   // Check AI availability
   async checkAIAvailability() {
+    if (this.currentProvider === 'openai') {
+      // Check OpenAI availability
+      if (this.openaiProvider && this.openaiProvider.isAvailable()) {
+        console.log('✅ OpenAI is ready');
+        window.aiAssistant?.sidebar.updateAIStatus('ready', 'OpenAI API configured');
+      } else {
+        console.log('❌ OpenAI is not configured');
+        window.aiAssistant?.sidebar.updateAIStatus('unavailable', 'OpenAI API key not configured');
+      }
+      return;
+    }
+
+    // Check Chrome built-in AI
     try {
       const response = await chrome.runtime.sendMessage({
         action: 'checkPromptAPI'
@@ -84,14 +117,14 @@ class AISessionManager {
 
       if (response.available) {
         if (response.state === 'ready') {
-          console.log('✅ AI is ready');
+          console.log('✅ Chrome AI is ready');
           window.aiAssistant?.sidebar.updateAIStatus('ready');
         } else if (response.state === 'download-required') {
-          console.log('📥 AI requires download');
+          console.log('📥 Chrome AI requires download');
           window.aiAssistant?.sidebar.updateAIStatus('download-required');
         }
       } else {
-        console.log('❌ AI is not available:', response.error);
+        console.log('❌ Chrome AI is not available:', response.error);
         window.aiAssistant?.sidebar.updateAIStatus('unavailable', response.error);
       }
     } catch (error) {
@@ -110,9 +143,11 @@ class AISessionManager {
     try {
       const response = await this.queryAI(prompt);
       window.aiAssistant?.sidebar.displayResponse(response);
+      return response; // Return response for form helper
     } catch (error) {
       console.error('AI query failed:', error);
       window.aiAssistant?.sidebar.displayError(error.message);
+      throw error;
     }
   }
 
@@ -203,6 +238,38 @@ class AISessionManager {
 
     await this.sendPromptToAI(prompt);
     promptInput.value = '';
+  }
+
+  // Handle settings change
+  async handleSettingsChange(settings) {
+    if (settings.aiProvider && settings.aiProvider !== this.currentProvider) {
+      this.currentProvider = settings.aiProvider;
+      console.log('AI provider changed to:', this.currentProvider);
+      
+      // Reinitialize providers if needed
+      if (this.currentProvider === 'openai' && this.openaiProvider) {
+        await this.openaiProvider.loadSettings();
+      }
+      
+      // Check availability of new provider
+      await this.checkAIAvailability();
+    }
+  }
+
+  // Get current provider info
+  getCurrentProviderInfo() {
+    if (this.currentProvider === 'openai' && this.openaiProvider) {
+      return {
+        provider: 'OpenAI',
+        ...this.openaiProvider.getUsageStats()
+      };
+    } else {
+      return {
+        provider: 'Chrome Built-in AI',
+        model: 'Gemini Nano',
+        isConfigured: true
+      };
+    }
   }
 }
 

@@ -27,6 +27,8 @@
         "modules/contentAnalysis.js",
         "modules/selectionActions.js",
         "modules/articleOverlay.js",
+        "modules/formHelper.js",
+        "modules/openaiProvider.js",
         "modules/aiSession.js",
         "content.js"
       ],
